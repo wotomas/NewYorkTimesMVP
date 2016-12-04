@@ -11,8 +11,8 @@ public class Multimedia {
 
     private String url;
     private String format;
-    private String height;
-    private String width;
+    private Integer height;
+    private Integer width;
     private String type;
     private String subtype;
     private String caption;
@@ -24,7 +24,7 @@ public class Multimedia {
     public Multimedia() {
     }
 
-    public Multimedia(String url, String format, String height, String width, String type, String subtype, String caption, String copyright) {
+    public Multimedia(String url, String format, Integer height, Integer width, String type, String subtype, String caption, String copyright) {
         this.url = url;
         this.format = format;
         this.height = height;
@@ -51,19 +51,19 @@ public class Multimedia {
         this.format = format;
     }
 
-    public String getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public void setHeight(String height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 
-    public String getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
-    public void setWidth(String width) {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 

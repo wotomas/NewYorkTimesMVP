@@ -30,8 +30,8 @@ public class Generator {
 
         media.addStringProperty("url");
         media.addStringProperty("format");
-        media.addStringProperty("height");
-        media.addStringProperty("width");
+        media.addIntProperty("height");
+        media.addIntProperty("width");
         media.addStringProperty("type");
         media.addStringProperty("subtype");
         media.addStringProperty("caption");

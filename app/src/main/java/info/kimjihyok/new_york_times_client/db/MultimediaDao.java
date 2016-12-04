@@ -25,8 +25,8 @@ public class MultimediaDao extends AbstractDao<Multimedia, Void> {
     public static class Properties {
         public final static Property Url = new Property(0, String.class, "url", false, "URL");
         public final static Property Format = new Property(1, String.class, "format", false, "FORMAT");
-        public final static Property Height = new Property(2, String.class, "height", false, "HEIGHT");
-        public final static Property Width = new Property(3, String.class, "width", false, "WIDTH");
+        public final static Property Height = new Property(2, Integer.class, "height", false, "HEIGHT");
+        public final static Property Width = new Property(3, Integer.class, "width", false, "WIDTH");
         public final static Property Type = new Property(4, String.class, "type", false, "TYPE");
         public final static Property Subtype = new Property(5, String.class, "subtype", false, "SUBTYPE");
         public final static Property Caption = new Property(6, String.class, "caption", false, "CAPTION");
@@ -48,8 +48,8 @@ public class MultimediaDao extends AbstractDao<Multimedia, Void> {
         db.execSQL("CREATE TABLE " + constraint + "\"MULTIMEDIA\" (" + //
                 "\"URL\" TEXT," + // 0: url
                 "\"FORMAT\" TEXT," + // 1: format
-                "\"HEIGHT\" TEXT," + // 2: height
-                "\"WIDTH\" TEXT," + // 3: width
+                "\"HEIGHT\" INTEGER," + // 2: height
+                "\"WIDTH\" INTEGER," + // 3: width
                 "\"TYPE\" TEXT," + // 4: type
                 "\"SUBTYPE\" TEXT," + // 5: subtype
                 "\"CAPTION\" TEXT," + // 6: caption
@@ -77,14 +77,14 @@ public class MultimediaDao extends AbstractDao<Multimedia, Void> {
             stmt.bindString(2, format);
         }
  
-        String height = entity.getHeight();
+        Integer height = entity.getHeight();
         if (height != null) {
-            stmt.bindString(3, height);
+            stmt.bindLong(3, height);
         }
  
-        String width = entity.getWidth();
+        Integer width = entity.getWidth();
         if (width != null) {
-            stmt.bindString(4, width);
+            stmt.bindLong(4, width);
         }
  
         String type = entity.getType();
@@ -120,8 +120,8 @@ public class MultimediaDao extends AbstractDao<Multimedia, Void> {
         Multimedia entity = new Multimedia( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // url
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // format
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // height
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // width
+            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // height
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // width
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // type
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // subtype
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // caption
@@ -135,8 +135,8 @@ public class MultimediaDao extends AbstractDao<Multimedia, Void> {
     public void readEntity(Cursor cursor, Multimedia entity, int offset) {
         entity.setUrl(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setFormat(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setHeight(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setWidth(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setHeight(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setWidth(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setType(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setSubtype(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCaption(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
