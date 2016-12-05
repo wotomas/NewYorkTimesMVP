@@ -32,8 +32,28 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
     private List<PostItem> mPostItems;
 
     public void addAll(List<PostItem> list) {
-        mPostItems.addAll(list);
-        notifyDataSetChanged();
+        // Add in to item list only if there are new posts
+        // Since API calls the top stories, if the first elements are equal, should not add to adapter
+        // if else, replace the whole list
+        if(mPostItems == null || list == null || list.size() < 1) return;
+
+        //if post item size is less than 0, just add all to list
+        if(mPostItems.size() < 1) {
+            mPostItems.addAll(list);
+            notifyDataSetChanged();
+        } else {
+            String oldItemFirstUrlKey = mPostItems.get(0).getUrl();
+            String newItemFirstUrlKey = list.get(0).getUrl();
+
+            if (DEBUG) Log.d(TAG, "addAll(): " + oldItemFirstUrlKey + " " + newItemFirstUrlKey);
+
+            if(!oldItemFirstUrlKey.equals(newItemFirstUrlKey)) {
+                mPostItems.clear();
+                mPostItems.addAll(list);
+                notifyDataSetChanged();
+            }
+        }
+
     }
 
 
@@ -58,7 +78,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
         if (postMediaList != null && postMediaList.size() > 0 && postMediaList != Collections.EMPTY_LIST) {
             holder.setImageUrl(postMediaList.get(0));
         } else {
-            if (DEBUG) Log.d(TAG, "onBindViewHolder() list is empty use default image placeholder");
+            //if (DEBUG) Log.d(TAG, "onBindViewHolder() list is empty use default image placeholder");
         }
     }
 
@@ -91,7 +111,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
 
         public void setImageUrl(Multimedia multimedia) {
             int screenWidth = ScreenUtil.getScreenWidth((Activity) mContext);
-            if (DEBUG) Log.d(TAG, "setImageUrl(): " + multimedia.getHeight() + " " + multimedia.getWidth() + " " + screenWidth);
+            //if (DEBUG) Log.d(TAG, "setImageUrl(): " + multimedia.getHeight() + " " + multimedia.getWidth() + " " + screenWidth);
             float widthPadding = ScreenUtil.getPixelFromDp(mContext, 52);
             int newWidth = (int) (screenWidth - widthPadding);
             Picasso.with(mContext).load(multimedia.getUrl())
