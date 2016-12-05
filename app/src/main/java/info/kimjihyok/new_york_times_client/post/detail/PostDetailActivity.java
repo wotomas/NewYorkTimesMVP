@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,12 +13,13 @@ import com.squareup.picasso.Picasso;
 
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.R;
+import info.kimjihyok.new_york_times_client.base.BaseActivity;
 import info.kimjihyok.new_york_times_client.base.BaseApplication;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
 import info.kimjihyok.new_york_times_client.util.ScreenUtil;
 
-public class PostDetailActivity extends AppCompatActivity implements PostDetailPresenter.View {
+public class PostDetailActivity extends BaseActivity implements PostDetailPresenter.View {
     private static final String TAG = "PostDetailActivity";
     private static final boolean DEBUG = BuildConfig.DEBUG;
 
