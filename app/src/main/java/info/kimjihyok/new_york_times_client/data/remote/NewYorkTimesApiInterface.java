@@ -1,4 +1,4 @@
-package info.kimjihyok.new_york_times_client.api;
+package info.kimjihyok.new_york_times_client.data.remote;
 
 import java.util.Map;
 

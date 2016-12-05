@@ -2,6 +2,7 @@ package com.example;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
+import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 
 public class Generator {
@@ -23,11 +24,14 @@ public class Generator {
     private static void addTables(final Schema schema) {
         Entity postItem = addPostItem(schema);
         Entity multiMedia = addMultimedia(schema);
+
+        Property multiMediaProperty = multiMedia.addLongProperty("post_id").notNull().getProperty();
+        multiMedia.addToOne(postItem, multiMediaProperty);
     }
 
     private static Entity addMultimedia(Schema schema) {
         Entity media = schema.addEntity("Multimedia");
-
+        media.addIdProperty().primaryKey().autoincrement();
         media.addStringProperty("url");
         media.addStringProperty("format");
         media.addIntProperty("height");

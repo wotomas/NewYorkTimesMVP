@@ -8,8 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 // KEEP INCLUDES END
-
-
 /**
  * Entity mapped to table "POST_ITEM".
  */
@@ -47,7 +45,7 @@ public class PostItem {
         this.id = id;
     }
 
-    public PostItem(Long id, String section, String subsection, String title, String url, String byline, String updated_date, String created_date, String published_date, String material_type_facet, String kicker, String des_facet, String org_facet, String per_facet, String geo_facet) {
+    public PostItem(Long id, String section, String subsection, String title, String url, String byline, String updated_date, String created_date, String published_date, String material_type_facet, String kicker) {
         this.id = id;
         this.section = section;
         this.subsection = subsection;
@@ -59,10 +57,6 @@ public class PostItem {
         this.published_date = published_date;
         this.material_type_facet = material_type_facet;
         this.kicker = kicker;
-        this.des_facet = des_facet;
-        this.org_facet = org_facet;
-        this.per_facet = per_facet;
-        this.geo_facet = geo_facet;
     }
 
     public Long getId() {
@@ -152,7 +146,6 @@ public class PostItem {
     public void setKicker(String kicker) {
         this.kicker = kicker;
     }
-
 
     // KEEP METHODS - put your custom methods here
     public String getAbstract() {

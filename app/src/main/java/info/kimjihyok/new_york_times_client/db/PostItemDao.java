@@ -34,10 +34,6 @@ public class PostItemDao extends AbstractDao<PostItem, Long> {
         public final static Property Published_date = new Property(8, String.class, "published_date", false, "PUBLISHED_DATE");
         public final static Property Material_type_facet = new Property(9, String.class, "material_type_facet", false, "MATERIAL_TYPE_FACET");
         public final static Property Kicker = new Property(10, String.class, "kicker", false, "KICKER");
-        public final static Property Des_facet = new Property(11, String.class, "des_facet", false, "DES_FACET");
-        public final static Property Org_facet = new Property(12, String.class, "org_facet", false, "ORG_FACET");
-        public final static Property Per_facet = new Property(13, String.class, "per_facet", false, "PER_FACET");
-        public final static Property Geo_facet = new Property(14, String.class, "geo_facet", false, "GEO_FACET");
     };
 
 
@@ -63,11 +59,7 @@ public class PostItemDao extends AbstractDao<PostItem, Long> {
                 "\"CREATED_DATE\" TEXT," + // 7: created_date
                 "\"PUBLISHED_DATE\" TEXT," + // 8: published_date
                 "\"MATERIAL_TYPE_FACET\" TEXT," + // 9: material_type_facet
-                "\"KICKER\" TEXT," + // 10: kicker
-                "\"DES_FACET\" TEXT," + // 11: des_facet
-                "\"ORG_FACET\" TEXT," + // 12: org_facet
-                "\"PER_FACET\" TEXT," + // 13: per_facet
-                "\"GEO_FACET\" TEXT);"); // 14: geo_facet
+                "\"KICKER\" TEXT);"); // 10: kicker
     }
 
     /** Drops the underlying database table. */
@@ -135,26 +127,6 @@ public class PostItemDao extends AbstractDao<PostItem, Long> {
         if (kicker != null) {
             stmt.bindString(11, kicker);
         }
- 
-        String des_facet = entity.getDes_facet();
-        if (des_facet != null) {
-            stmt.bindString(12, des_facet);
-        }
- 
-        String org_facet = entity.getOrg_facet();
-        if (org_facet != null) {
-            stmt.bindString(13, org_facet);
-        }
- 
-        String per_facet = entity.getPer_facet();
-        if (per_facet != null) {
-            stmt.bindString(14, per_facet);
-        }
- 
-        String geo_facet = entity.getGeo_facet();
-        if (geo_facet != null) {
-            stmt.bindString(15, geo_facet);
-        }
     }
 
     /** @inheritdoc */
@@ -177,11 +149,7 @@ public class PostItemDao extends AbstractDao<PostItem, Long> {
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // created_date
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // published_date
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // material_type_facet
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // kicker
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // des_facet
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // org_facet
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // per_facet
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14) // geo_facet
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // kicker
         );
         return entity;
     }
@@ -200,10 +168,6 @@ public class PostItemDao extends AbstractDao<PostItem, Long> {
         entity.setPublished_date(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setMaterial_type_facet(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setKicker(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setDes_facet(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setOrg_facet(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setPer_facet(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setGeo_facet(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
      }
     
     /** @inheritdoc */

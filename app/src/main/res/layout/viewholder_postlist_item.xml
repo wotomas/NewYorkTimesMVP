@@ -16,6 +16,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
             android:id="@+id/image_thumbnail"
             tools:src="@drawable/sample_thumbnail_image"/>
 
