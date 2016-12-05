@@ -26,16 +26,18 @@ public class PostItem {
     private String published_date;
     private String material_type_facet;
     private String kicker;
-    private String des_facet;
-    private String org_facet;
-    private String per_facet;
-    private String geo_facet;
 
     // KEEP FIELDS - put your custom fields here
     @SerializedName("abstract")
     private String abstract_string;
 
     private List<Multimedia> multimedia;
+
+    //Ignore these fields when serializing
+    private transient String des_facet;
+    private transient String org_facet;
+    private transient String per_facet;
+    private transient String geo_facet;
     // KEEP FIELDS END
 
     public PostItem() {
@@ -151,6 +153,24 @@ public class PostItem {
         this.kicker = kicker;
     }
 
+
+    // KEEP METHODS - put your custom methods here
+    public String getAbstract() {
+        return abstract_string;
+    }
+
+    public void setAbstract(String abstract_string) {
+        this.abstract_string = abstract_string;
+    }
+
+    public List<Multimedia> getMultimedia() {
+        return multimedia;
+    }
+
+    public void setMultimedia(List<Multimedia> multimedia) {
+        this.multimedia = multimedia;
+    }
+
     public String getDes_facet() {
         return des_facet;
     }
@@ -181,23 +201,6 @@ public class PostItem {
 
     public void setGeo_facet(String geo_facet) {
         this.geo_facet = geo_facet;
-    }
-
-    // KEEP METHODS - put your custom methods here
-    public String getAbstract() {
-        return abstract_string;
-    }
-
-    public void setAbstract(String abstract_string) {
-        this.abstract_string = abstract_string;
-    }
-
-    public List<Multimedia> getMultimedia() {
-        return multimedia;
-    }
-
-    public void setMultimedia(List<Multimedia> multimedia) {
-        this.multimedia = multimedia;
     }
     // KEEP METHODS END
 

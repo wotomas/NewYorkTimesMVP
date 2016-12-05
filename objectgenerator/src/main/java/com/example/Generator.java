@@ -56,10 +56,6 @@ public class Generator {
 
         postItem.addStringProperty("material_type_facet");
         postItem.addStringProperty("kicker");
-        postItem.addStringProperty("des_facet");
-        postItem.addStringProperty("org_facet");
-        postItem.addStringProperty("per_facet");
-        postItem.addStringProperty("geo_facet");
 
         return postItem;
     }
