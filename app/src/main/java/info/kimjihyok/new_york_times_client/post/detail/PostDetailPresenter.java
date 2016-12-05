@@ -1,13 +1,13 @@
 package info.kimjihyok.new_york_times_client.post.detail;
 
-import android.util.Log;
-
 import java.util.List;
 
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.base.BasePresenter;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -38,19 +38,22 @@ public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.Vi
     public void attachView(View view) {
         mMVPView = view;
 
-        mSubscriptions.add(mDataController.getSinglePostItem(mPostUrlKey).doOnNext(postItem -> {
-            if(postItem != null) {
-                mMVPView.setMainImage(getOptimizedMedia(postItem.getMultimedia()));
-                mMVPView.setTitle(postItem.getTitle());
-                mMVPView.setSectionText(postItem.getSection());
-                mMVPView.setAuthor(postItem.getByline());
-                mMVPView.setCreatedDate(postItem.getCreated_date());
-            }
-        }).subscribe(onNext -> {
+        mSubscriptions.add(mDataController.getSinglePostItem(mPostUrlKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(postItem -> {
+                    if(postItem != null) {
+                        mMVPView.setTitle(postItem.getTitle());
+                        mMVPView.setSectionText(postItem.getSection());
+                        mMVPView.setAuthor(postItem.getByline());
+                        mMVPView.setCreatedDate(postItem.getCreated_date());
+                        mMVPView.setMainImage(getOptimizedMedia(postItem.getMultimedia()));
+                    }
+            }).subscribe(onNext -> {
 
-        }, onError -> {
-            if (DEBUG) Log.e(TAG, "attachView() error: ", onError);
-        }));
+            }, onError -> {
+                //if (DEBUG) Log.e(TAG, "attachView() error: ", onError);
+            }));
     }
 
     public Multimedia getOptimizedMedia(List<Multimedia> multimedias) {

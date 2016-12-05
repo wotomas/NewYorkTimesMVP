@@ -1,7 +1,5 @@
 package info.kimjihyok.new_york_times_client.post.list;
 
-import android.util.Log;
-
 import java.util.List;
 
 import info.kimjihyok.new_york_times_client.BuildConfig;
@@ -38,10 +36,10 @@ public class PostListPresenter implements BasePresenter<PostListPresenter.View> 
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(onNext -> {
-                            if(DEBUG) Log.d(TAG, "onNext: " + onNext.size());
+                            //if(DEBUG) Log.d(TAG, "onNext: " + onNext.size());
                             mMVPView.onSubscribe(onNext);
                         }, onError -> {
-                            if(DEBUG) Log.e(TAG, "onError: " + onError.getMessage());
+                            //if(DEBUG) Log.e(TAG, "onError: " + onError.getMessage());
                         }));
 
     }
