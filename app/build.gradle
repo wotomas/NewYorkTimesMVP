@@ -52,15 +52,14 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
-    // RxJava and RxBinding
+    // RxJava
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
     // Font
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 
-    //Image Library
+    // Image Library
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     // Font
@@ -68,4 +67,9 @@ dependencies {
 
     // Network Debug
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.0'
+
+    // Memory Leak
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.facebook.stetho.Stetho;
+import com.squareup.leakcanary.LeakCanary;
 
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.db.DaoMaster;
@@ -20,14 +21,22 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //set up stetho and leak canary
+        if(BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this);
+            if (LeakCanary.isInAnalyzerProcess(this)) {
+                // This process is dedicated to LeakCanary for heap analysis.
+                // You should not init your app in this process.
+                return;
+            }
+            LeakCanary.install(this);
+        }
+
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "user-db", null);
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         mDaoSession = daoMaster.newSession();
-        //set up stetho
-        if(BuildConfig.DEBUG) {
-            Stetho.initializeWithDefaults(this);
-        }
+
     }
 
     public DaoSession getDaoSession() {
