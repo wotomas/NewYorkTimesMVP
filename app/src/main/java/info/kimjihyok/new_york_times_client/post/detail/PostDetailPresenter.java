@@ -2,6 +2,8 @@ package info.kimjihyok.new_york_times_client.post.detail;
 
 import android.util.Log;
 
+import java.util.List;
+
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.base.BasePresenter;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
@@ -15,6 +17,12 @@ import rx.subscriptions.CompositeSubscription;
 public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.View> {
     private static final String TAG = "PostDetailPresenter";
     private static final boolean DEBUG = BuildConfig.DEBUG;
+
+    private static final String MIDEA_TYPE_STANDARD_THUMBNAIL = "Standard Thumbnail";
+    private static final String MIDEA_TYPE_LARGE_THUMBNAIL = "thumbLarge";
+    private static final String MIDEA_TYPE_NORMAL = "Normal";
+    private static final String MIDEA_TYPE_SUPER_JUMBO = "superJumbo";
+
 
     private DataController mDataController;
     private View mMVPView;
@@ -32,11 +40,7 @@ public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.Vi
 
         mSubscriptions.add(mDataController.getSinglePostItem(mPostUrlKey).doOnNext(postItem -> {
             if(postItem != null) {
-                if(postItem.getMultimedia() != null && postItem.getMultimedia().size() > 1) {
-                    mMVPView.setMainImage(postItem.getMultimedia().get(1));
-                } else {
-                    mMVPView.setMainImage(null);
-                }
+                mMVPView.setMainImage(getOptimizedMedia(postItem.getMultimedia()));
                 mMVPView.setTitle(postItem.getTitle());
                 mMVPView.setSectionText(postItem.getSection());
                 mMVPView.setAuthor(postItem.getByline());
@@ -47,6 +51,16 @@ public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.Vi
         }, onError -> {
             if (DEBUG) Log.e(TAG, "attachView() error: ", onError);
         }));
+    }
+
+    public Multimedia getOptimizedMedia(List<Multimedia> multimedias) {
+        for(Multimedia media: multimedias) {
+            if(media.getFormat().equals(MIDEA_TYPE_SUPER_JUMBO)) {
+                return media;
+            }
+        }
+
+        return null;
     }
 
     @Override

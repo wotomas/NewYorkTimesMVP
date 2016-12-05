@@ -117,6 +117,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
             float widthPadding = ScreenUtil.getPixelFromDp(mContext, 52);
             int newWidth = (int) (screenWidth - widthPadding);
             Picasso.with(mContext).load(multimedia.getUrl())
+                    .placeholder(R.drawable.progress_animation)
+                    .error(R.drawable.load_error_image)
                     .resize(newWidth / 2, newWidth / 2).centerInside()
                     .into(mThumbnail);
         }

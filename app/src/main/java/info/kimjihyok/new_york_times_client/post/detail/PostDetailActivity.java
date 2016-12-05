@@ -99,6 +99,8 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailP
         } else {
             int screenWidth = ScreenUtil.getScreenWidth((Activity) this);
             Picasso.with(this).load(media.getUrl())
+                    .placeholder(R.drawable.progress_animation)
+                    .error(R.drawable.load_error_image)
                     .resize(screenWidth, screenWidth).centerInside()
                     .into(mPostDetailImage);
         }
