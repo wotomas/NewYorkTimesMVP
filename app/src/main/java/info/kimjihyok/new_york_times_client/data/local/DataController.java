@@ -9,6 +9,7 @@ import info.kimjihyok.new_york_times_client.db.DaoSession;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
 import info.kimjihyok.new_york_times_client.db.MultimediaDao;
 import info.kimjihyok.new_york_times_client.db.PostItem;
+import info.kimjihyok.new_york_times_client.db.PostItemDao;
 import info.kimjihyok.new_york_times_client.post.list.TopStoryResult;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -62,7 +63,7 @@ public class DataController {
             item.setMultimedia(mediaList);
         }
 
-        return Observable.just(items);
+        return Observable.defer(() -> Observable.just(items));
     }
 
     public Observable<TopStoryResult> getRemoteData() {
@@ -80,5 +81,19 @@ public class DataController {
     public Observable<List<PostItem>> getCombinedPosts() {
         return getInitLocalData().concatWith(getRemoteData()
                 .map(TopStoryResult::getResults));
+    }
+
+    public Observable<PostItem> getSinglePostItem(String url) {
+        List<PostItem> item = mDaoSession.getPostItemDao().queryBuilder().where(PostItemDao.Properties.Url.eq(url)).list();
+
+        if(item == null || item.size() == 0) {
+            //do a fallback mechanism to fetch from remote using new api
+
+            return null;
+        } else {
+            List<Multimedia> mediaList = mDaoSession.getMultimediaDao().queryBuilder().where(MultimediaDao.Properties.Post_url.eq(url)).list();
+            item.get(0).setMultimedia(mediaList);
+            return Observable.defer(() -> Observable.just(item.get(0)));
+        }
     }
 }

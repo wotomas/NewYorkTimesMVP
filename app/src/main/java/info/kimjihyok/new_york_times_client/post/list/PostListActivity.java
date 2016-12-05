@@ -1,6 +1,7 @@
 package info.kimjihyok.new_york_times_client.post.list;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -48,6 +49,12 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle("New York Times");
+        }
+
         bindViews();
         mDataController = new DataController(((BaseApplication) getApplication()).getDaoSession());
         mNavigationHelper = new NavigationHelper(this);
@@ -82,7 +89,7 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
     @Override
     public void onPostItemClick(PostItem postItem) {
         if (DEBUG) Log.d(TAG, "onPostItemClick(): view: " + postItem.getUrl());
-        mNavigationHelper.goToPostDetailPage(1);
+        mNavigationHelper.goToPostDetailPage(postItem.getUrl());
     }
 
     @Override

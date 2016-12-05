@@ -17,10 +17,10 @@ public class NavigationHelper {
         this.activity = activity;
     }
 
-    public void goToPostDetailPage(int postItemKey) {
+    public void goToPostDetailPage(String postUrlKey) {
         Intent postDetailPage = new Intent(activity, PostDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("postKey", postItemKey);
+        bundle.putString("postKey", postUrlKey);
         postDetailPage.putExtras(bundle);
         activity.startActivity(postDetailPage);
     }
