@@ -1,5 +1,8 @@
 package info.kimjihyok.new_york_times_client.post.detail;
 
+import android.util.Log;
+
+import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.base.BasePresenter;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
@@ -10,6 +13,9 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.View> {
+    private static final String TAG = "PostDetailPresenter";
+    private static final boolean DEBUG = BuildConfig.DEBUG;
+
     private DataController mDataController;
     private View mMVPView;
     private String mPostUrlKey;
@@ -26,13 +32,21 @@ public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.Vi
 
         mSubscriptions.add(mDataController.getSinglePostItem(mPostUrlKey).doOnNext(postItem -> {
             if(postItem != null) {
-                if(postItem.getMultimedia() != null) mMVPView.setMainImage(postItem.getMultimedia().get(1));
+                if(postItem.getMultimedia() != null && postItem.getMultimedia().size() > 1) {
+                    mMVPView.setMainImage(postItem.getMultimedia().get(1));
+                } else {
+                    mMVPView.setMainImage(null);
+                }
                 mMVPView.setTitle(postItem.getTitle());
                 mMVPView.setSectionText(postItem.getSection());
                 mMVPView.setAuthor(postItem.getByline());
                 mMVPView.setCreatedDate(postItem.getCreated_date());
             }
-        }).subscribe());
+        }).subscribe(onNext -> {
+
+        }, onError -> {
+            if (DEBUG) Log.e(TAG, "attachView() error: ", onError);
+        }));
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -93,10 +94,14 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailP
 
     @Override
     public void setMainImage(Multimedia media) {
-        int screenWidth = ScreenUtil.getScreenWidth((Activity) this);
-        Picasso.with(this).load(media.getUrl())
-                .resize(screenWidth, screenWidth).centerInside()
-                .into(mPostDetailImage);
+        if(media == null) {
+            mPostDetailImage.setVisibility(View.GONE);
+        } else {
+            int screenWidth = ScreenUtil.getScreenWidth((Activity) this);
+            Picasso.with(this).load(media.getUrl())
+                    .resize(screenWidth, screenWidth).centerInside()
+                    .into(mPostDetailImage);
+        }
     }
 
     @Override
