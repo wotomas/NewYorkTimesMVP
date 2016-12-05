@@ -21,7 +21,8 @@ public class Multimedia {
     private String subtype;
     private String caption;
     private String copyright;
-    private long post_id;
+    /** Not-null value. */
+    private String post_url;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -30,7 +31,7 @@ public class Multimedia {
     private transient MultimediaDao myDao;
 
     private PostItem postItem;
-    private Long postItem__resolvedKey;
+    private String postItem__resolvedKey;
 
 
     // KEEP FIELDS - put your custom fields here
@@ -43,7 +44,7 @@ public class Multimedia {
         this.id = id;
     }
 
-    public Multimedia(Long id, String url, String format, Integer height, Integer width, String type, String subtype, String caption, String copyright, long post_id) {
+    public Multimedia(Long id, String url, String format, Integer height, Integer width, String type, String subtype, String caption, String copyright, String post_url) {
         this.id = id;
         this.url = url;
         this.format = format;
@@ -53,7 +54,7 @@ public class Multimedia {
         this.subtype = subtype;
         this.caption = caption;
         this.copyright = copyright;
-        this.post_id = post_id;
+        this.post_url = post_url;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -134,18 +135,20 @@ public class Multimedia {
         this.copyright = copyright;
     }
 
-    public long getPost_id() {
-        return post_id;
+    /** Not-null value. */
+    public String getPost_url() {
+        return post_url;
     }
 
-    public void setPost_id(long post_id) {
-        this.post_id = post_id;
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setPost_url(String post_url) {
+        this.post_url = post_url;
     }
 
     /** To-one relationship, resolved on first access. */
     public PostItem getPostItem() {
-        long __key = this.post_id;
-        if (postItem__resolvedKey == null || !postItem__resolvedKey.equals(__key)) {
+        String __key = this.post_url;
+        if (postItem__resolvedKey == null || postItem__resolvedKey != __key) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
@@ -161,12 +164,12 @@ public class Multimedia {
 
     public void setPostItem(PostItem postItem) {
         if (postItem == null) {
-            throw new DaoException("To-one property 'post_id' has not-null constraint; cannot set to-one to null");
+            throw new DaoException("To-one property 'post_url' has not-null constraint; cannot set to-one to null");
         }
         synchronized (this) {
             this.postItem = postItem;
-            post_id = postItem.getId();
-            postItem__resolvedKey = post_id;
+            post_url = postItem.getUrl();
+            postItem__resolvedKey = post_url;
         }
     }
 

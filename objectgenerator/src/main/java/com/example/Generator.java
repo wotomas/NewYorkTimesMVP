@@ -25,7 +25,7 @@ public class Generator {
         Entity postItem = addPostItem(schema);
         Entity multiMedia = addMultimedia(schema);
 
-        Property multiMediaProperty = multiMedia.addLongProperty("post_id").notNull().getProperty();
+        Property multiMediaProperty = multiMedia.addStringProperty("post_url").notNull().getProperty();
         multiMedia.addToOne(postItem, multiMediaProperty);
     }
 
@@ -45,14 +45,13 @@ public class Generator {
 
     private static Entity addPostItem(final Schema schema) {
         Entity postItem = schema.addEntity("PostItem");
-        postItem.addIdProperty().primaryKey().autoincrement();
         postItem.addStringProperty("section");
         postItem.addStringProperty("subsection");
 
         postItem.addStringProperty("title");
         //abstract add in custom field
         //postItem.addStringProperty("abstract");
-        postItem.addStringProperty("url");
+        postItem.addStringProperty("url").primaryKey().unique();
         postItem.addStringProperty("byline");
         postItem.addStringProperty("updated_date");
         postItem.addStringProperty("created_date");

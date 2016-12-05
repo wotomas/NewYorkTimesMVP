@@ -35,7 +35,7 @@ public class MultimediaDao extends AbstractDao<Multimedia, Long> {
         public final static Property Subtype = new Property(6, String.class, "subtype", false, "SUBTYPE");
         public final static Property Caption = new Property(7, String.class, "caption", false, "CAPTION");
         public final static Property Copyright = new Property(8, String.class, "copyright", false, "COPYRIGHT");
-        public final static Property Post_id = new Property(9, long.class, "post_id", false, "POST_ID");
+        public final static Property Post_url = new Property(9, String.class, "post_url", false, "POST_URL");
     };
 
     private DaoSession daoSession;
@@ -63,7 +63,7 @@ public class MultimediaDao extends AbstractDao<Multimedia, Long> {
                 "\"SUBTYPE\" TEXT," + // 6: subtype
                 "\"CAPTION\" TEXT," + // 7: caption
                 "\"COPYRIGHT\" TEXT," + // 8: copyright
-                "\"POST_ID\" INTEGER NOT NULL );"); // 9: post_id
+                "\"POST_URL\" TEXT NOT NULL );"); // 9: post_url
     }
 
     /** Drops the underlying database table. */
@@ -121,7 +121,7 @@ public class MultimediaDao extends AbstractDao<Multimedia, Long> {
         if (copyright != null) {
             stmt.bindString(9, copyright);
         }
-        stmt.bindLong(10, entity.getPost_id());
+        stmt.bindString(10, entity.getPost_url());
     }
 
     @Override
@@ -149,7 +149,7 @@ public class MultimediaDao extends AbstractDao<Multimedia, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // subtype
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // caption
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // copyright
-            cursor.getLong(offset + 9) // post_id
+            cursor.getString(offset + 9) // post_url
         );
         return entity;
     }
@@ -166,7 +166,7 @@ public class MultimediaDao extends AbstractDao<Multimedia, Long> {
         entity.setSubtype(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setCaption(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setCopyright(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setPost_id(cursor.getLong(offset + 9));
+        entity.setPost_url(cursor.getString(offset + 9));
      }
     
     /** @inheritdoc */
@@ -201,7 +201,7 @@ public class MultimediaDao extends AbstractDao<Multimedia, Long> {
             builder.append(',');
             SqlUtils.appendColumns(builder, "T0", daoSession.getPostItemDao().getAllColumns());
             builder.append(" FROM MULTIMEDIA T");
-            builder.append(" LEFT JOIN POST_ITEM T0 ON T.\"POST_ID\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN POST_ITEM T0 ON T.\"POST_URL\"=T0.\"URL\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }

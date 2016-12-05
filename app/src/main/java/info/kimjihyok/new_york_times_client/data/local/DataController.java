@@ -9,11 +9,13 @@ import info.kimjihyok.new_york_times_client.db.DaoSession;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
 import info.kimjihyok.new_york_times_client.db.MultimediaDao;
 import info.kimjihyok.new_york_times_client.db.PostItem;
+import info.kimjihyok.new_york_times_client.post.list.TopStoryResult;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
 import rx.schedulers.Schedulers;
 
 /**
@@ -47,7 +49,24 @@ public class DataController {
 
         NewYorkTimesApiInterface service = retrofit.create(NewYorkTimesApiInterface.class);
         mApiController = new ApiController(service);
-        mApiController.getTopStoriesList().doOnNext(topStoryResult -> {
+    }
+
+
+    public Observable<List<PostItem>> getInitLocalData() {
+        // Manually fetch media from local DB and put it to memory
+        List<PostItem> items = mDaoSession.getPostItemDao().loadAll();
+
+        for(PostItem item: items) {
+            List<Multimedia> mediaList = mDaoSession.getMultimediaDao().queryBuilder().where(MultimediaDao.Properties.Post_url.eq(item.getUrl())).list();
+            //if (DEBUG) Log.d(TAG, "getInitLocalData(): " + mediaList.size());
+            item.setMultimedia(mediaList);
+        }
+
+        return Observable.just(items);
+    }
+
+    public Observable<TopStoryResult> getRemoteData() {
+        return mApiController.getTopStoriesList().doOnNext(topStoryResult -> {
             for(PostItem result: topStoryResult.getResults()) {
                 mDaoSession.getPostItemDao().insertOrReplaceInTx(result);
                 for(Multimedia media : result.getMultimedia()) {
@@ -55,20 +74,11 @@ public class DataController {
                     mDaoSession.getMultimediaDao().insertOrReplaceInTx(media);
                 }
             }
-        }).subscribe();
+        });
     }
 
-
-    public List<PostItem> getInitLocalData() {
-        // Manually fetch media from local DB and put it to memory
-        List<PostItem> items = mDaoSession.getPostItemDao().loadAll();
-
-        for(PostItem item: items) {
-            List<Multimedia> mediaList = mDaoSession.getMultimediaDao().queryBuilder().where(MultimediaDao.Properties.Post_id.eq(item.getId())).list();
-            //if (DEBUG) Log.d(TAG, "getInitLocalData(): " + mediaList.size());
-            item.setMultimedia(mediaList);
-        }
-
-        return items;
+    public Observable<List<PostItem>> getCombinedPosts() {
+        return getInitLocalData().concatWith(getRemoteData()
+                .map(TopStoryResult::getResults));
     }
 }

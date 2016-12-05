@@ -31,6 +31,13 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
 
     private List<PostItem> mPostItems;
 
+    public void addAll(List<PostItem> list) {
+        mPostItems.addAll(list);
+        notifyDataSetChanged();
+    }
+
+
+
     public PostListAdapter(List<PostItem> mPostItems) {
         this.mPostItems = mPostItems;
     }

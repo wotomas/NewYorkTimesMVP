@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class PostItem {
 
-    private Long id;
     private String section;
     private String subsection;
     private String title;
@@ -41,12 +40,11 @@ public class PostItem {
     public PostItem() {
     }
 
-    public PostItem(Long id) {
-        this.id = id;
+    public PostItem(String url) {
+        this.url = url;
     }
 
-    public PostItem(Long id, String section, String subsection, String title, String url, String byline, String updated_date, String created_date, String published_date, String material_type_facet, String kicker) {
-        this.id = id;
+    public PostItem(String section, String subsection, String title, String url, String byline, String updated_date, String created_date, String published_date, String material_type_facet, String kicker) {
         this.section = section;
         this.subsection = subsection;
         this.title = title;
@@ -57,14 +55,6 @@ public class PostItem {
         this.published_date = published_date;
         this.material_type_facet = material_type_facet;
         this.kicker = kicker;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getSection() {

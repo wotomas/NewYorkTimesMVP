@@ -3,6 +3,7 @@ package info.kimjihyok.new_york_times_client.post.list;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +37,12 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDataController = new DataController(((BaseApplication) getApplication()).getDaoSession());
-
         bindViews();
-        mPresenter = new PostListPresenter();
+        mDataController = new DataController(((BaseApplication) getApplication()).getDaoSession());
         mNavigationHelper = new NavigationHelper(this);
+
+
+        mPresenter = new PostListPresenter(mDataController);
     }
 
     private void bindViews() {
@@ -49,9 +51,10 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
         // should reset layout manager on view rotate
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mPostListAdapter = new PostListAdapter(mDataController.getInitLocalData());
-        //mPostListAdapter = new PostListAdapter(DebugUtil.getDummyData());
+        mPostListAdapter = new PostListAdapter(new ArrayList<PostItem>());
         mRecyclerView.setAdapter(mPostListAdapter);
+        //mPostListAdapter = new PostListAdapter(DebugUtil.getDummyData());
+
     }
 
     @Override
@@ -69,6 +72,12 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
     @Override
     public void onPostItemClick(int postItemKey) {
         mNavigationHelper.goToPostDetailPage(postItemKey);
+    }
+
+    @Override
+    public void onSubscribe(List<PostItem> list) {
+        if (DEBUG) Log.d(TAG, "onSubscribe(): list " + list.size());
+        mPostListAdapter.addAll(list);
     }
 
 }
