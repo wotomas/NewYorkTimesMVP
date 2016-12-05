@@ -57,6 +57,16 @@ public class PostDetailActivity extends BaseActivity implements PostDetailPresen
     }
 
     @Override
+    protected void onScreenChangeToLandscape() {
+        //Do nothing in post detail activity
+    }
+
+    @Override
+    protected void onScreenChangeToPortrait() {
+        //Do nothing in post detail activity
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         mPresenter.attachView(this);

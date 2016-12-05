@@ -38,11 +38,10 @@ public class PostListPresenter implements BasePresenter<PostListPresenter.View> 
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(onNext -> {
-                            // get remote posts can call 0 when network is unstable or unable
-                            // handle from adapter
+                            if(DEBUG) Log.d(TAG, "onNext: " + onNext.size());
                             mMVPView.onSubscribe(onNext);
                         }, onError -> {
-                            if(DEBUG) Log.e(TAG, "onError: ", onError);
+                            if(DEBUG) Log.e(TAG, "onError: " + onError.getMessage());
                         }));
 
     }

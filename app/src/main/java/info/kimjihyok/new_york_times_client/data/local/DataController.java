@@ -1,5 +1,7 @@
 package info.kimjihyok.new_york_times_client.data.local;
 
+import android.util.Log;
+
 import java.util.List;
 
 import info.kimjihyok.new_york_times_client.BuildConfig;
@@ -80,7 +82,9 @@ public class DataController {
 
     public Observable<List<PostItem>> getCombinedPosts() {
         return getInitLocalData().concatWith(getRemoteData()
-                .map(TopStoryResult::getResults));
+                .map(TopStoryResult::getResults)).doOnNext(postItems -> {
+                    if(DEBUG) Log.d(TAG, "getCombinedPosts() " + postItems.size());
+        });
     }
 
     public Observable<PostItem> getSinglePostItem(String url) {

@@ -1,5 +1,6 @@
 package info.kimjihyok.new_york_times_client.post.list;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
@@ -61,13 +62,32 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
         mPresenter = new PostListPresenter(mDataController);
     }
 
+    @Override
+    protected void onScreenChangeToLandscape() {
+        if (DEBUG) Log.d(TAG, "onScreenChangeToLandscape(): running");
+        mPostListAdapter.onScreenChangeToLandscape();
+    }
+
+    @Override
+    protected void onScreenChangeToPortrait() {
+        if (DEBUG) Log.d(TAG, "onScreenChangeToPortrait(): running");
+        mPostListAdapter.onScreenChangeToPortrait();
+    }
+
     private void bindViews() {
         mRecyclerView = (RecyclerView) findViewById(R.id.container);
         // depends on grid orientation change params for layout manager
         // should reset layout manager on view rotate
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mPostListAdapter = new PostListAdapter(new ArrayList<PostItem>());
+        int displayMode = getResources().getConfiguration().orientation;
+
+        if(displayMode == Configuration.ORIENTATION_LANDSCAPE) {
+            mPostListAdapter = new PostListAdapter(new ArrayList<PostItem>(), false);
+        } else {
+            mPostListAdapter = new PostListAdapter(new ArrayList<PostItem>(), true);
+        }
+
         mPostListAdapter.addOnClickListener(itemClickListenter);
         mRecyclerView.setAdapter(mPostListAdapter);
         //mPostListAdapter = new PostListAdapter(DebugUtil.getDummyData());

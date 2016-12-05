@@ -28,6 +28,9 @@ import info.kimjihyok.new_york_times_client.util.ScreenUtil;
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostListItemViewHolder> implements View.OnClickListener {
     private static final String TAG = "PostListAdapter";
     private static final boolean DEBUG = BuildConfig.DEBUG;
+
+    private boolean mIsPortraitMode;
+
     private List<PostItem> mPostItems;
     private View.OnClickListener mClickListener;
 
@@ -57,14 +60,15 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
     }
 
 
-    public PostListAdapter(List<PostItem> mPostItems) {
+    public PostListAdapter(List<PostItem> mPostItems, boolean isPortraitMode) {
         this.mPostItems = mPostItems;
+        this.mIsPortraitMode = isPortraitMode;
     }
 
     @Override
     public PostListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_postlist_item, parent, false);
-        return new PostListItemViewHolder(v, parent.getContext(), this);
+        return new PostListItemViewHolder(v, parent.getContext(), this, mIsPortraitMode);
     }
 
     @Override
@@ -97,18 +101,35 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
         mClickListener = itemClickListenter;
     }
 
+    public void onScreenChangeToLandscape() {
+        mIsPortraitMode = false;
+        notifyDataSetChanged();
+    }
+
+    public void onScreenChangeToPortrait() {
+        mIsPortraitMode = true;
+        notifyDataSetChanged();
+    }
+
     static class PostListItemViewHolder extends RecyclerView.ViewHolder {
         private ImageView mThumbnail;
         private TextView mTitle;
         private Context mContext;
 
-        PostListItemViewHolder(View itemView, Context context, View.OnClickListener listener) {
+        PostListItemViewHolder(View itemView, Context context, View.OnClickListener listener, boolean mIsPortraitMode) {
             super(itemView);
             mContext = context;
             mThumbnail = (ImageView) itemView.findViewById(R.id.image_thumbnail);
-            mTitle = (TextView) itemView.findViewById(R.id.news_title_text);
-            mTitle.setBackgroundColor(Color.parseColor("#AAAAAA"));
-            mTitle.setOnClickListener(listener);
+            if(mIsPortraitMode) {
+                mTitle = (TextView) itemView.findViewById(R.id.news_title_text);
+                mTitle.setBackgroundColor(Color.parseColor("#AAAAAA"));
+                mTitle.setOnClickListener(listener);
+                mTitle.setVisibility(View.VISIBLE);
+            } else {
+                mTitle = (TextView) itemView.findViewById(R.id.news_title_text);
+                mTitle.setVisibility(View.GONE);
+            }
+
         }
 
         public void setImageUrl(Multimedia multimedia) {
