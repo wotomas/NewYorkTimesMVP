@@ -25,7 +25,7 @@ public class PostListPresenter implements BasePresenter<PostListPresenter.View> 
     private View mMVPView;
 
     public interface View {
-        void onPostItemClick(int postItemKey);
+        void onPostItemClick(PostItem postItem);
         void onSubscribe(List<PostItem> list);
     }
 

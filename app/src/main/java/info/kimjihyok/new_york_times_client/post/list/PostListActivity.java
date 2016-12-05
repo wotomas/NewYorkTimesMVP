@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +31,18 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
     private PostListAdapter mPostListAdapter;
     private DataController mDataController;
 
-    //TODO: temp testing data, should remove
-    private List<PostItem> mTestingData = new ArrayList<>();
+    private View.OnClickListener itemClickListenter = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            PostItem item = (PostItem) view.getTag();
+            if(item != null) {
+                onPostItemClick(item);
+            } else {
+                if (DEBUG) Log.d(TAG, "onClick(): view tag is null");
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +51,6 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
         bindViews();
         mDataController = new DataController(((BaseApplication) getApplication()).getDaoSession());
         mNavigationHelper = new NavigationHelper(this);
-
-
         mPresenter = new PostListPresenter(mDataController);
     }
 
@@ -52,6 +61,7 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mPostListAdapter = new PostListAdapter(new ArrayList<PostItem>());
+        mPostListAdapter.addOnClickListener(itemClickListenter);
         mRecyclerView.setAdapter(mPostListAdapter);
         //mPostListAdapter = new PostListAdapter(DebugUtil.getDummyData());
 
@@ -70,8 +80,9 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
     }
 
     @Override
-    public void onPostItemClick(int postItemKey) {
-        mNavigationHelper.goToPostDetailPage(postItemKey);
+    public void onPostItemClick(PostItem postItem) {
+        if (DEBUG) Log.d(TAG, "onPostItemClick(): view: " + postItem.getUrl());
+        mNavigationHelper.goToPostDetailPage(1);
     }
 
     @Override

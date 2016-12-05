@@ -28,8 +28,8 @@ import info.kimjihyok.new_york_times_client.util.ScreenUtil;
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostListItemViewHolder> implements View.OnClickListener {
     private static final String TAG = "PostListAdapter";
     private static final boolean DEBUG = BuildConfig.DEBUG;
-
     private List<PostItem> mPostItems;
+    private View.OnClickListener mClickListener;
 
     public void addAll(List<PostItem> list) {
         // Add in to item list only if there are new posts
@@ -57,7 +57,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
     }
 
 
-
     public PostListAdapter(List<PostItem> mPostItems) {
         this.mPostItems = mPostItems;
     }
@@ -72,7 +71,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
     public void onBindViewHolder(PostListItemViewHolder holder, int position) {
         PostItem postItem = mPostItems.get(position);
         if(postItem == null) return;
-        holder.setTitle(postItem.getTitle());
+        holder.setTitle(postItem);
 
         List<Multimedia> postMediaList = postItem.getMultimedia();
         if (postMediaList != null && postMediaList.size() > 0 && postMediaList != Collections.EMPTY_LIST) {
@@ -91,7 +90,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
 
     @Override
     public void onClick(View view) {
-        if (DEBUG) Log.d(TAG, "onClick(): view: " + view.getTag());
+        mClickListener.onClick(view);
+    }
+
+    public void addOnClickListener(View.OnClickListener itemClickListenter) {
+        mClickListener = itemClickListenter;
     }
 
     static class PostListItemViewHolder extends RecyclerView.ViewHolder {
@@ -106,7 +109,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
             mTitle = (TextView) itemView.findViewById(R.id.news_title_text);
             mTitle.setBackgroundColor(Color.parseColor("#AAAAAA"));
             mTitle.setOnClickListener(listener);
-            mTitle.setTag("Post title");
         }
 
         public void setImageUrl(Multimedia multimedia) {
@@ -119,8 +121,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
                     .into(mThumbnail);
         }
 
-        public void setTitle(String mTitle) {
-            this.mTitle.setText(mTitle);
+        public void setTitle(PostItem item) {
+            this.mTitle.setText(item.getTitle());
+            this.mTitle.setTag(item);
         }
     }
 }
