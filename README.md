@@ -1,6 +1,16 @@
 # NewYorkTimesMVP
 New York Times Client MVP Experimental Project. 24 hour project created with use of MVP pattern, RxJava, and Testing
 
+Punch Line
+-------
+ - Fetching data from a remote API and updating local data seamlessly
+  - Use RxJava concatWith operator to manipulate data according to user's network status
+  - Use RxJava retryWhen operator for optimized retry logic
+ - Screen rotation handling
+ - Decoupling logics from Android specific framework to make code testable and more maintainable
+ - Memory Leak Identification
+
+
 Dagger 2
 -------
 TODO
@@ -9,6 +19,7 @@ TODO
 Testing
 -------
 Mockito and JUnit4 are used for tests.
+TODO
 
 
 Libraries
@@ -29,6 +40,11 @@ Libraries
     * debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     * releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     * testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    
+TODO
+------
+ - Decoupling more buisness logics
+ - MultiMidea logic handling is dumb
 
 
 License
