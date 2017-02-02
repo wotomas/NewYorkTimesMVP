@@ -1,4 +1,7 @@
 # NewYorkTimesMVP
+![Travis-ci](https://api.travis-ci.org/wotomas/NewYorkTimesMVP.svg)
+
+
 New York Times Client MVP Experimental Project. 24 hour project created with use of MVP pattern, RxJava, and Testing
 
 Punch Line
