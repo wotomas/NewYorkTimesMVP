@@ -1,4 +1,4 @@
-package info.kimjihyok.new_york_times_client.base;
+package info.kimjihyok.new_york_times_client.base.activity;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -44,5 +44,4 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract void onScreenChangeToLandscape();
     protected abstract void onScreenChangeToPortrait();
-
 }

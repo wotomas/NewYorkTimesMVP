@@ -13,8 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.R;
-import info.kimjihyok.new_york_times_client.base.BaseActivity;
-import info.kimjihyok.new_york_times_client.base.BaseApplication;
+import info.kimjihyok.new_york_times_client.base.activity.BaseActivity;
+import info.kimjihyok.new_york_times_client.base.application.BaseApplication;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
 import info.kimjihyok.new_york_times_client.util.ScreenUtil;
@@ -51,7 +51,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailPresen
             mPostUrlKey = intent.getStringExtra("postKey");
         }
 
-        mDataController = new DataController(((BaseApplication) getApplication()).getDaoSession());
+        mDataController = new DataController(BaseApplication.getApplicationComponent().getDaoSession());
 
         mPresenter = new PostDetailPresenter(mDataController, mPostUrlKey);
     }

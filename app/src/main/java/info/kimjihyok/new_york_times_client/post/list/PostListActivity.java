@@ -13,8 +13,8 @@ import java.util.List;
 
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.R;
-import info.kimjihyok.new_york_times_client.base.BaseActivity;
-import info.kimjihyok.new_york_times_client.base.BaseApplication;
+import info.kimjihyok.new_york_times_client.base.activity.BaseActivity;
+import info.kimjihyok.new_york_times_client.base.application.BaseApplication;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
 import info.kimjihyok.new_york_times_client.db.PostItem;
 import info.kimjihyok.new_york_times_client.util.NavigationHelper;
@@ -57,7 +57,7 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
         }
 
         bindViews();
-        mDataController = new DataController(((BaseApplication) getApplication()).getDaoSession());
+        mDataController = new DataController(BaseApplication.getApplicationComponent().getDaoSession());
         mNavigationHelper = new NavigationHelper(this);
         mPresenter = new PostListPresenter(mDataController);
     }
