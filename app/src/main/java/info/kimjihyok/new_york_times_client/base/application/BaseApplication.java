@@ -8,9 +8,7 @@ import com.squareup.leakcanary.LeakCanary;
 import javax.inject.Inject;
 
 import info.kimjihyok.new_york_times_client.BuildConfig;
-import info.kimjihyok.new_york_times_client.base.DaggerApplicationComponent;
-import info.kimjihyok.new_york_times_client.base.application.ApplicationComponent;
-import info.kimjihyok.new_york_times_client.base.application.ApplicationModule;
+import info.kimjihyok.new_york_times_client.base.modules.ApplicationModule;
 import info.kimjihyok.new_york_times_client.db.DaoSession;
 
 /**

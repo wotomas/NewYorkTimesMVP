@@ -1,4 +1,4 @@
-package info.kimjihyok.new_york_times_client.base.application;
+package info.kimjihyok.new_york_times_client.base.modules;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;

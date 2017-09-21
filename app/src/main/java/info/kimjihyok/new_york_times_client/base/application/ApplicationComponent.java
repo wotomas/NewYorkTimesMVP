@@ -3,6 +3,7 @@ package info.kimjihyok.new_york_times_client.base.application;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import info.kimjihyok.new_york_times_client.base.modules.ApplicationModule;
 import info.kimjihyok.new_york_times_client.db.DaoSession;
 
 /**
