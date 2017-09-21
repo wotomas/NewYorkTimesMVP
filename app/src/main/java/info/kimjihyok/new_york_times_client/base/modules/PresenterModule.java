@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import info.kimjihyok.new_york_times_client.base.activity.ActivityScope;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
+import info.kimjihyok.new_york_times_client.post.detail.PostDetailPresenter;
 import info.kimjihyok.new_york_times_client.post.list.PostListPresenter;
 
 /**
@@ -12,10 +13,15 @@ import info.kimjihyok.new_york_times_client.post.list.PostListPresenter;
 
 @Module
 public class PresenterModule {
-
   @Provides
   @ActivityScope
   PostListPresenter providesPostListPresenter(DataController dataController) {
     return new PostListPresenter(dataController);
+  }
+
+  @Provides
+  @ActivityScope
+  PostDetailPresenter providesPostDetailPresenter(DataController dataController) {
+    return new PostDetailPresenter(dataController);
   }
 }

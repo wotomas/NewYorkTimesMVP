@@ -53,7 +53,8 @@ public class PostDetailPresenterTest {
         mSinglePostObservable = Observable.just(getValidPostItem());
         when(mDataController.getSinglePostItem(URL)).thenReturn(mSinglePostObservable);
 
-        mPresenter = new PostDetailPresenter(mDataController, URL);
+        mPresenter = new PostDetailPresenter(mDataController);
+        mPresenter.setPostUrlKey(URL);
         mPresenter.attachView(mView);
 
         verify(mView, atLeastOnce()).setTitle(TITLE);
@@ -66,7 +67,8 @@ public class PostDetailPresenterTest {
     public void givenNullPostItemIsReturned_whenViewIsAttached_shouldNotPassToViewButShowNothing() throws Exception {
         when(mDataController.getSinglePostItem(URL)).thenReturn(Observable.just(null));
 
-        mPresenter = new PostDetailPresenter(mDataController, URL);
+        mPresenter = new PostDetailPresenter(mDataController);
+        mPresenter.setPostUrlKey(URL);
         mPresenter.attachView(mView);
 
         verify(mView, never()).setTitle(TITLE);

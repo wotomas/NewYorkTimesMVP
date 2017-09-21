@@ -5,19 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.R;
 import info.kimjihyok.new_york_times_client.base.activity.BaseActivity;
-import info.kimjihyok.new_york_times_client.base.application.BaseApplication;
-import info.kimjihyok.new_york_times_client.base.modules.PresenterModule;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
 import info.kimjihyok.new_york_times_client.db.PostItem;
 import info.kimjihyok.new_york_times_client.util.NavigationHelper;
@@ -48,8 +43,7 @@ public class PostListActivity extends BaseActivity implements PostListPresenter.
 
     bindViews();
 
-    BaseActivity.getActivityComponent()
-        .inject(this);
+    BaseActivity.getActivityComponent().inject(this);
   }
 
   @Override

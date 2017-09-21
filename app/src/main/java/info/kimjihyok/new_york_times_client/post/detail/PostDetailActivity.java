@@ -11,10 +11,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import javax.inject.Inject;
+
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.R;
 import info.kimjihyok.new_york_times_client.base.activity.BaseActivity;
-import info.kimjihyok.new_york_times_client.base.application.BaseApplication;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
 import info.kimjihyok.new_york_times_client.util.ScreenUtil;
@@ -28,16 +29,18 @@ public class PostDetailActivity extends BaseActivity implements PostDetailPresen
     private TextView mPostSectionTextView;
     private TextView mPostAuthorTextView;
     private ImageView mPostDetailImage;
-
-    private DataController mDataController;
     private String mPostUrlKey;
-    private PostDetailPresenter mPresenter;
+
+    @Inject DataController mDataController;
+    @Inject PostDetailPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
         bindView();
+
+        BaseActivity.getActivityComponent().inject(this);
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
@@ -47,13 +50,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailPresen
         }
 
         Intent intent = getIntent();
-        if(intent != null) {
-            mPostUrlKey = intent.getStringExtra("postKey");
-        }
-
-        mDataController = new DataController(BaseApplication.getApplicationComponent().getDaoSession());
-
-        mPresenter = new PostDetailPresenter(mDataController, mPostUrlKey);
+        if(intent != null) mPresenter.setPostUrlKey(intent.getStringExtra("postKey"));
     }
 
     @Override

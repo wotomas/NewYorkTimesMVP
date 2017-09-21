@@ -23,6 +23,5 @@ import info.kimjihyok.new_york_times_client.post.list.PostListActivity;
 )
 public interface ActivityComponent {
   void inject(PostListActivity postListActivity);
-
   void inject(PostDetailActivity postDetailActivity);
 }
