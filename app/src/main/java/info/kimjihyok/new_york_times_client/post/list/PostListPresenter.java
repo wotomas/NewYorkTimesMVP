@@ -17,43 +17,39 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class PostListPresenter implements BasePresenter<PostListPresenter.View> {
-    private static final String TAG = "PostListPresenter";
-    private static final boolean DEBUG = BuildConfig.DEBUG;
+  private static final String TAG = "PostListPresenter";
+  private static final boolean DEBUG = BuildConfig.DEBUG;
 
-    private CompositeDisposable mSubscriptions = new CompositeDisposable();
-    private DataController mDataController;
-    private View mMVPView;
+  private CompositeDisposable mSubscriptions = new CompositeDisposable();
+  private DataController mDataController;
+  private View mMVPView;
 
-    public interface View {
-        void onPostItemClick(PostItem postItem);
-        void onSubscribe(List<PostItem> list);
-    }
+  public interface View {
+    void onPostItemClick(PostItem postItem);
 
-    @Override
-    public void attachView(View view) {
-        mMVPView = view;
+    void onSubscribe(List<PostItem> list);
+  }
 
-        mSubscriptions.add(
-                mDataController.getCombinedPosts()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(onNext -> {
-                            if(DEBUG) Log.d(TAG, "onNext: " + onNext.size());
-                            mMVPView.onSubscribe(onNext);
-                        }, onError -> {
-                            if(DEBUG) Log.e(TAG, "onError: ", onError);
-                        }));
+  @Override
+  public void attachView(View view) {
+    mMVPView = view;
 
-    }
+    mSubscriptions.add(
+        mDataController.getCombinedPosts()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(onNext -> mMVPView.onSubscribe(onNext), onError -> {}));
 
-    @Override
-    public void detachView() {
-        this.mMVPView = null;
-        if(mSubscriptions != null && !mSubscriptions.isDisposed()) mSubscriptions.dispose();
-    }
+  }
+
+  @Override
+  public void detachView() {
+    this.mMVPView = null;
+    if (mSubscriptions != null && !mSubscriptions.isDisposed()) mSubscriptions.dispose();
+  }
 
 
-    public PostListPresenter(DataController dataController) {
-        mDataController = dataController;
-    }
+  public PostListPresenter(DataController dataController) {
+    mDataController = dataController;
+  }
 }
