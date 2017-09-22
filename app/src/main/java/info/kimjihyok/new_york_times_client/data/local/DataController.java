@@ -3,23 +3,17 @@ package info.kimjihyok.new_york_times_client.data.local;
 import android.util.Log;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.data.remote.ApiController;
-import info.kimjihyok.new_york_times_client.data.remote.NewYorkTimesApiInterface;
 import info.kimjihyok.new_york_times_client.db.DaoSession;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
 import info.kimjihyok.new_york_times_client.db.MultimediaDao;
 import info.kimjihyok.new_york_times_client.db.PostItem;
 import info.kimjihyok.new_york_times_client.db.PostItemDao;
-import info.kimjihyok.new_york_times_client.post.list.TopStoryResult;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
-import rx.schedulers.Schedulers;
+import io.reactivex.Maybe;
+import io.reactivex.Observable;
 
 /**
  * Created by jkimab on 2016. 12. 5..
@@ -32,72 +26,49 @@ public class DataController {
     private ApiController mApiController;
     private DaoSession mDaoSession;
 
-    public DataController(DaoSession mDaoSession) {
+    public DataController(DaoSession mDaoSession, ApiController apiController) {
         this.mDaoSession = mDaoSession;
-        init();
+        this.mApiController = apiController;
     }
-
-    private void init() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(httpLoggingInterceptor);
-
-        // Create simple REST adapter which points to the Google API
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(builder.build())
-                .baseUrl(ApiController.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io())).build();
-
-        NewYorkTimesApiInterface service = retrofit.create(NewYorkTimesApiInterface.class);
-        mApiController = new ApiController(service);
-    }
-
 
     public Observable<List<PostItem>> getInitLocalData() {
-        // Manually fetch media from local DB and put it to memory
-        List<PostItem> items = mDaoSession.getPostItemDao().loadAll();
-
-        for(PostItem item: items) {
-            List<Multimedia> mediaList = mDaoSession.getMultimediaDao().queryBuilder().where(MultimediaDao.Properties.Post_url.eq(item.getUrl())).list();
-            //if (DEBUG) Log.d(TAG, "getInitLocalData(): " + mediaList.size());
-            item.setMultimedia(mediaList);
-        }
-
-        return Observable.defer(() -> Observable.just(items));
+        return Observable.fromIterable(mDaoSession.getPostItemDao().loadAll())
+            .flatMap(item -> Observable.just(mDaoSession.getMultimediaDao()
+                .queryBuilder()
+                .where(MultimediaDao.Properties.Post_url.eq(item.getUrl()))
+                .list())
+                .doOnNext(item::setMultimedia)
+                .map(multimedia -> item))
+            .toList().toObservable();
     }
 
-    public Observable<TopStoryResult> getRemoteData() {
-        return mApiController.getTopStoriesList().doOnNext(topStoryResult -> {
-            for(PostItem result: topStoryResult.getResults()) {
-                mDaoSession.getPostItemDao().insertOrReplaceInTx(result);
-                for(Multimedia media : result.getMultimedia()) {
-                    media.setPostItem(result);
-                    mDaoSession.getMultimediaDao().insertOrReplaceInTx(media);
-                }
-            }
-        });
+    public Observable<List<PostItem>> getRemoteData() {
+        return mApiController.getTopStoriesList()
+            .flatMap(topStoryResult -> Observable.fromIterable(topStoryResult.getResults())
+                .doOnNext(result -> mDaoSession.getPostItemDao().insertOrReplaceInTx(result))
+                .doOnNext(result -> {
+                    for (Multimedia media : result.getMultimedia()) {
+                        media.setPostItem(result);
+                        mDaoSession.getMultimediaDao().insertOrReplaceInTx(media);
+                    }
+                }))
+            .toList().toObservable();
     }
 
     public Observable<List<PostItem>> getCombinedPosts() {
-        return getInitLocalData().concatWith(getRemoteData()
-                .map(TopStoryResult::getResults)).doOnNext(postItems -> {
-                    if(DEBUG) Log.d(TAG, "getCombinedPosts() " + postItems.size());
-        });
+        return getRemoteData().publish(
+            network -> Observable.merge(
+                network,
+                getInitLocalData().takeUntil(network)
+            ))
+            .debounce(200, TimeUnit.MILLISECONDS);
     }
 
-    public Observable<PostItem> getSinglePostItem(String url) {
-        List<PostItem> item = mDaoSession.getPostItemDao().queryBuilder().where(PostItemDao.Properties.Url.eq(url)).list();
-
-        if(item == null || item.size() == 0) {
-            //do a fallback mechanism to fetch from remote using new api
-
-            return null;
-        } else {
-            List<Multimedia> mediaList = mDaoSession.getMultimediaDao().queryBuilder().where(MultimediaDao.Properties.Post_url.eq(url)).list();
-            item.get(0).setMultimedia(mediaList);
-            return Observable.defer(() -> Observable.just(item.get(0)));
-        }
+    public Maybe<PostItem> getSinglePostItem(String url) {
+        return Observable.fromIterable(mDaoSession.getPostItemDao().queryBuilder().where(PostItemDao.Properties.Url.eq(url)).list())
+            .flatMap(postItem -> Observable.just(mDaoSession.getMultimediaDao().queryBuilder().where(MultimediaDao.Properties.Post_url.eq(url)).list())
+                .doOnNext(postItem::setMultimedia)
+                .map(mediaList -> postItem))
+            .firstElement();
     }
 }

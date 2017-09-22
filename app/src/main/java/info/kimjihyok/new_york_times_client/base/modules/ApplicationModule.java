@@ -7,8 +7,15 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import info.kimjihyok.new_york_times_client.data.remote.ApiController;
+import info.kimjihyok.new_york_times_client.data.remote.NewYorkTimesApiInterface;
 import info.kimjihyok.new_york_times_client.db.DaoMaster;
 import info.kimjihyok.new_york_times_client.db.DaoSession;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by jihyokkim on 2017. 9. 21..
@@ -40,4 +47,6 @@ public class ApplicationModule {
     DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(application, "user-db", null);
     return helper.getWritableDatabase();
   }
+
+
 }

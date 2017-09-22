@@ -6,9 +6,9 @@ import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.base.BasePresenter;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by jkimab on 2016. 12. 5..
@@ -26,12 +26,12 @@ public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.Vi
 
   private DataController mDataController;
   private View mMVPView;
-  private CompositeSubscription mSubscriptions;
+  private CompositeDisposable mSubscriptions;
   private String mPostUrlKey;
 
   public PostDetailPresenter(DataController dataController) {
     this.mDataController = dataController;
-    this.mSubscriptions = new CompositeSubscription();
+    this.mSubscriptions = new CompositeDisposable();
   }
 
   public void setPostUrlKey(String mPostUrlKey) {
@@ -46,13 +46,11 @@ public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.Vi
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(postItem -> {
-          if (postItem != null) {
             mMVPView.setTitle(postItem.getTitle());
             mMVPView.setSectionText(postItem.getSection());
             mMVPView.setAuthor(postItem.getByline());
             mMVPView.setCreatedDate(postItem.getCreated_date());
             mMVPView.setMainImage(getOptimizedMedia(postItem.getMultimedia()));
-          }
         }, onError -> {
           //if (DEBUG) Log.e(TAG, "attachView() error: ", onError);
         }));
@@ -71,7 +69,7 @@ public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.Vi
   @Override
   public void detachView() {
     this.mMVPView = null;
-    if (mSubscriptions != null) mSubscriptions.unsubscribe();
+    if (mSubscriptions != null && !mSubscriptions.isDisposed()) mSubscriptions.dispose();
   }
 
   public interface View {
