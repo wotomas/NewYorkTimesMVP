@@ -16,7 +16,14 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
+}
+
+ext {
+    supportLibraryVersion = '25.3.1'
 }
 
 task clean(type: Delete) {

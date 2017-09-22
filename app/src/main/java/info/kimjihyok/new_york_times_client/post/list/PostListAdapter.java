@@ -3,12 +3,14 @@ package info.kimjihyok.new_york_times_client.post.list;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -94,6 +96,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
 
     @Override
     public void onClick(View view) {
+        Log.d(TAG, "onClick()");
         mClickListener.onClick(view);
     }
 
@@ -112,6 +115,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
     }
 
     static class PostListItemViewHolder extends RecyclerView.ViewHolder {
+        private RelativeLayout holder;
         private ImageView mThumbnail;
         private TextView mTitle;
         private Context mContext;
@@ -119,17 +123,18 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
         PostListItemViewHolder(View itemView, Context context, View.OnClickListener listener, boolean mIsPortraitMode) {
             super(itemView);
             mContext = context;
+            holder = (RelativeLayout) itemView.findViewById(R.id.holder);
             mThumbnail = (ImageView) itemView.findViewById(R.id.image_thumbnail);
             if(mIsPortraitMode) {
                 mTitle = (TextView) itemView.findViewById(R.id.news_title_text);
                 mTitle.setBackgroundColor(Color.parseColor("#AAAAAA"));
-                mTitle.setOnClickListener(listener);
                 mTitle.setVisibility(View.VISIBLE);
             } else {
                 mTitle = (TextView) itemView.findViewById(R.id.news_title_text);
                 mTitle.setVisibility(View.GONE);
             }
 
+            holder.setOnClickListener(listener);
         }
 
         public void setImageUrl(Multimedia multimedia) {
@@ -146,7 +151,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.PostLi
 
         public void setTitle(PostItem item) {
             this.mTitle.setText(item.getTitle());
-            this.mTitle.setTag(item);
+            this.holder.setTag(item);
         }
     }
 }
