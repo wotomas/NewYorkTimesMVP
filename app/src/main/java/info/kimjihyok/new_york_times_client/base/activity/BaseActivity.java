@@ -57,7 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
   protected ActivityComponent buildActivityComponent() {
     return DaggerActivityComponent.builder()
         .activityModule(new ActivityModule(this))
-        .applicationComponent(BaseApplication.getApplicationComponent())
+        .applicationComponent(((BaseApplication)getApplication()).getApplicationComponent())
         .dataModule(new DataModule())
         .presenterModule(new PresenterModule())
         .build();

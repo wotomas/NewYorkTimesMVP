@@ -16,9 +16,7 @@ import info.kimjihyok.new_york_times_client.db.DaoSession;
  */
 
 public class BaseApplication extends Application {
-    @Inject DaoSession mDaoSession;
-
-    private static ApplicationComponent applicationComponent;
+    private ApplicationComponent applicationComponent;
 
     @Override
     public void onCreate() {
@@ -35,16 +33,16 @@ public class BaseApplication extends Application {
             LeakCanary.install(this);
         }
 
-        applicationComponent = buildApplicationComponent().build();
-        applicationComponent.inject(this);
+        applicationComponent = buildApplicationComponent();
     }
 
-    protected DaggerApplicationComponent.Builder buildApplicationComponent() {
+    protected ApplicationComponent buildApplicationComponent() {
         return DaggerApplicationComponent.builder()
-            .applicationModule(new ApplicationModule(this));
+            .applicationModule(new ApplicationModule(this))
+            .build();
     }
 
-    public static ApplicationComponent getApplicationComponent() {
+    public ApplicationComponent getApplicationComponent() {
         return applicationComponent;
     }
 }
