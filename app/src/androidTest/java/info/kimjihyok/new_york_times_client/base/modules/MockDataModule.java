@@ -1,5 +1,6 @@
 package info.kimjihyok.new_york_times_client.base.modules;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,6 +50,10 @@ public class MockDataModule {
   }
 
   private Observable<List<PostItem>> getFakeCombinedPosts() {
-    return Observable.just(Collections.emptyList());
+    return Observable.range(0, 20).map(this::getFamePostItem).toList().toObservable();
+  }
+
+  private PostItem getFamePostItem(int index) {
+    return new PostItem("", "", "Fake Post position " + index, "", "", "", "", "", "", "");
   }
 }

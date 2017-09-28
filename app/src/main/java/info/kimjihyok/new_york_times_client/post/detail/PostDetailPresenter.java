@@ -57,7 +57,9 @@ public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.Vi
         }));
   }
 
-  public Multimedia getOptimizedMedia(List<Multimedia> multimedias) {
+  private Multimedia getOptimizedMedia(List<Multimedia> multimedias) {
+    if (multimedias == null) return null;
+
     for (Multimedia media : multimedias) {
       if (media.getFormat().equals(MIDEA_TYPE_SUPER_JUMBO)) {
         return media;
