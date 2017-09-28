@@ -9,6 +9,7 @@ import dagger.Module;
 import dagger.Provides;
 import info.kimjihyok.new_york_times_client.db.DaoMaster;
 import info.kimjihyok.new_york_times_client.db.DaoSession;
+import info.kimjihyok.new_york_times_client.db.DaoSessionInterface;
 
 import static org.mockito.Mockito.mock;
 
@@ -17,25 +18,11 @@ import static org.mockito.Mockito.mock;
  */
 
 @Module
-public class MockApplicationModule extends ApplicationModule {
-  public MockApplicationModule(Application application) {
-    super(application);
-  }
+public class MockApplicationModule {
 
   @Provides
   @Singleton
-  @Override
-  DaoSession providesDaoSession(DaoMaster daoMaster) {
-    return mock(DaoSession.class);
-  }
-
-  @Override
-  DaoMaster providesDaoMaster(SQLiteDatabase db) {
-    return mock(DaoMaster.class);
-  }
-
-  @Override
-  SQLiteDatabase providesSQLiteDatabase() {
-    return mock(SQLiteDatabase.class);
+  DaoSessionInterface providesDaoSession() {
+    return mock(DaoSessionInterface.class);
   }
 }

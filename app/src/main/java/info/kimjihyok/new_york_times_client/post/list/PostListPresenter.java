@@ -7,6 +7,7 @@ import java.util.List;
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.base.BasePresenter;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
+import info.kimjihyok.new_york_times_client.data.local.DataControllerInterface;
 import info.kimjihyok.new_york_times_client.db.PostItem;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -21,7 +22,7 @@ public class PostListPresenter implements BasePresenter<PostListPresenter.View> 
   private static final boolean DEBUG = BuildConfig.DEBUG;
 
   private CompositeDisposable mSubscriptions = new CompositeDisposable();
-  private DataController mDataController;
+  private DataControllerInterface mDataController;
   private View mMVPView;
 
   public interface View {
@@ -49,7 +50,7 @@ public class PostListPresenter implements BasePresenter<PostListPresenter.View> 
   }
 
 
-  public PostListPresenter(DataController dataController) {
+  public PostListPresenter(DataControllerInterface dataController) {
     mDataController = dataController;
   }
 }

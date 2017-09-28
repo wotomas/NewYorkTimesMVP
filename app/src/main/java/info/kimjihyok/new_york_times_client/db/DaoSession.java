@@ -22,7 +22,7 @@ import info.kimjihyok.new_york_times_client.db.MultimediaDao;
  * 
  * @see de.greenrobot.dao.AbstractDaoSession
  */
-public class DaoSession extends AbstractDaoSession {
+public class DaoSession extends AbstractDaoSession implements DaoSessionInterface {
 
     private final DaoConfig postItemDaoConfig;
     private final DaoConfig multimediaDaoConfig;

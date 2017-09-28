@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.data.remote.ApiController;
 import info.kimjihyok.new_york_times_client.db.DaoSession;
+import info.kimjihyok.new_york_times_client.db.DaoSessionInterface;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
 import info.kimjihyok.new_york_times_client.db.MultimediaDao;
 import info.kimjihyok.new_york_times_client.db.PostItem;
@@ -19,14 +20,14 @@ import io.reactivex.Observable;
  * Created by jkimab on 2016. 12. 5..
  */
 
-public class DataController {
+public class DataController implements DataControllerInterface {
     private static final String TAG = "DataController";
     private static final boolean DEBUG = BuildConfig.DEBUG;
 
     private ApiController mApiController;
-    private DaoSession mDaoSession;
+    private DaoSessionInterface mDaoSession;
 
-    public DataController(DaoSession mDaoSession, ApiController apiController) {
+    public DataController(DaoSessionInterface mDaoSession, ApiController apiController) {
         this.mDaoSession = mDaoSession;
         this.mApiController = apiController;
     }

@@ -7,6 +7,7 @@ import info.kimjihyok.new_york_times_client.base.modules.ApplicationModule;
 import info.kimjihyok.new_york_times_client.base.modules.NetworkModule;
 import info.kimjihyok.new_york_times_client.data.remote.ApiController;
 import info.kimjihyok.new_york_times_client.db.DaoSession;
+import info.kimjihyok.new_york_times_client.db.DaoSessionInterface;
 
 /**
  * Created by jihyokkim on 2017. 9. 21..
@@ -20,6 +21,6 @@ import info.kimjihyok.new_york_times_client.db.DaoSession;
 public interface ApplicationComponent {
   void inject(BaseApplication baseApplication);
 
-  DaoSession getDaoSession();
+  DaoSessionInterface getDaoSession();
   ApiController getApiController();
 }

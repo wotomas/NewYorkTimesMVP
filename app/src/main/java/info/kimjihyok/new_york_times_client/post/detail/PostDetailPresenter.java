@@ -5,6 +5,7 @@ import java.util.List;
 import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.base.BasePresenter;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
+import info.kimjihyok.new_york_times_client.data.local.DataControllerInterface;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -24,12 +25,12 @@ public class PostDetailPresenter implements BasePresenter<PostDetailPresenter.Vi
   private static final String MIDEA_TYPE_SUPER_JUMBO = "superJumbo";
 
 
-  private DataController mDataController;
+  private DataControllerInterface mDataController;
   private View mMVPView;
   private CompositeDisposable mSubscriptions;
   private String mPostUrlKey;
 
-  public PostDetailPresenter(DataController dataController) {
+  public PostDetailPresenter(DataControllerInterface dataController) {
     this.mDataController = dataController;
     this.mSubscriptions = new CompositeDisposable();
   }

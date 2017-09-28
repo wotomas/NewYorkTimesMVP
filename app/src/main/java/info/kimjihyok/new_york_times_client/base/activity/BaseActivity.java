@@ -1,16 +1,21 @@
 package info.kimjihyok.new_york_times_client.base.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import info.kimjihyok.new_york_times_client.R;
 import info.kimjihyok.new_york_times_client.base.application.BaseApplication;
 import info.kimjihyok.new_york_times_client.base.modules.ActivityModule;
 import info.kimjihyok.new_york_times_client.base.modules.DataModule;
 import info.kimjihyok.new_york_times_client.base.modules.PresenterModule;
+import info.kimjihyok.new_york_times_client.post.detail.PostDetailActivity;
+import info.kimjihyok.new_york_times_client.post.list.PostListActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -19,8 +24,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
-
-  private static ActivityComponent activityComponent;
+  private static final String TAG = "BaseActivity";
+  private ActivityComponent activityComponent;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +35,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         .setFontAttrId(R.attr.fontPath)
         .build());
 
-    activityComponent = buildActivityComponent();
+    activityComponent = ((BaseApplication) getApplication()).getDependencyGraph().defineActivityComponent(
+        ((BaseApplication) getApplication()).getApplicationComponent(),
+        this
+    );
   }
 
   @Override
@@ -54,16 +62,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
   protected abstract void onScreenChangeToPortrait();
 
-  protected ActivityComponent buildActivityComponent() {
-    return DaggerActivityComponent.builder()
-        .activityModule(new ActivityModule(this))
-        .applicationComponent(((BaseApplication)getApplication()).getApplicationComponent())
-        .dataModule(new DataModule())
-        .presenterModule(new PresenterModule())
-        .build();
-  }
-
-  public static ActivityComponent getActivityComponent() {
+  public ActivityComponent getActivityComponent() {
     return activityComponent;
   }
 }

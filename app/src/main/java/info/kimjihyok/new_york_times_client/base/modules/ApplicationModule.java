@@ -11,6 +11,7 @@ import info.kimjihyok.new_york_times_client.data.remote.ApiController;
 import info.kimjihyok.new_york_times_client.data.remote.NewYorkTimesApiInterface;
 import info.kimjihyok.new_york_times_client.db.DaoMaster;
 import info.kimjihyok.new_york_times_client.db.DaoSession;
+import info.kimjihyok.new_york_times_client.db.DaoSessionInterface;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -31,7 +32,7 @@ public class ApplicationModule {
 
   @Provides
   @Singleton
-  DaoSession providesDaoSession(DaoMaster daoMaster) {
+  DaoSessionInterface providesDaoSession(DaoMaster daoMaster) {
     return daoMaster.newSession();
   }
 

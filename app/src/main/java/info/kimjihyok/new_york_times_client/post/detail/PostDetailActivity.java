@@ -17,6 +17,7 @@ import info.kimjihyok.new_york_times_client.BuildConfig;
 import info.kimjihyok.new_york_times_client.R;
 import info.kimjihyok.new_york_times_client.base.activity.BaseActivity;
 import info.kimjihyok.new_york_times_client.data.local.DataController;
+import info.kimjihyok.new_york_times_client.data.local.DataControllerInterface;
 import info.kimjihyok.new_york_times_client.db.Multimedia;
 import info.kimjihyok.new_york_times_client.util.ScreenUtil;
 
@@ -31,7 +32,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailPresen
     private ImageView mPostDetailImage;
     private String mPostUrlKey;
 
-    @Inject DataController mDataController;
+    @Inject DataControllerInterface mDataController;
     @Inject PostDetailPresenter mPresenter;
 
     @Override
@@ -39,8 +40,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailPresen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
         bindView();
-
-        BaseActivity.getActivityComponent().inject(this);
+        getActivityComponent().inject(this);
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {

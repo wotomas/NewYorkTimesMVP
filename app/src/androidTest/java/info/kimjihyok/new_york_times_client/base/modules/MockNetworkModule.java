@@ -1,5 +1,6 @@
 package info.kimjihyok.new_york_times_client.base.modules;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -14,12 +15,11 @@ import static org.mockito.Mockito.mock;
  */
 
 @Module
-public class MockNetworkModule extends NetworkModule {
+public class MockNetworkModule {
 
-  @Override
   @Singleton
   @Provides
-  ApiController providesApiController(NewYorkTimesApiInterface service) {
+  ApiController providesApiController() {
     return mock(ApiController.class);
   }
 }
