@@ -5,6 +5,10 @@
 general:
     artifacts:
         - /home/ubuntu/CriminalIntent/app/build/outputs/apk/
+    general:
+        branches:
+            only:
+                - master # list of branches to build
 
 machine:
     environment:
