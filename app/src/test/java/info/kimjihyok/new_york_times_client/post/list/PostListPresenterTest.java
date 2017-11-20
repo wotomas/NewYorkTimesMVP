@@ -11,19 +11,22 @@ import java.util.List;
 
 import info.kimjihyok.new_york_times_client.data.local.DataController;
 import info.kimjihyok.new_york_times_client.db.PostItem;
-import info.kimjihyok.new_york_times_client.post.RxSchedulersOverrideRule;
+import info.kimjihyok.new_york_times_client.post.BasePresenterTest;
 import info.kimjihyok.new_york_times_client.util.DebugUtil;
-import rx.Observable;
+import io.reactivex.Maybe;
+import io.reactivex.Observable;
 
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
  * Created by jkimab on 2016. 12. 5..
  */
-public class PostListPresenterTest {
+public class PostListPresenterTest extends BasePresenterTest {
     private PostListPresenter mPresenter;
     private List<PostItem> mValidDummyData;
 
@@ -32,8 +35,6 @@ public class PostListPresenterTest {
 
     private Observable<List<PostItem>> mPostListObservable;
 
-    @Rule
-    public final RxSchedulersOverrideRule mOverrideRule = new RxSchedulersOverrideRule();
 
 
     @Before
@@ -44,15 +45,14 @@ public class PostListPresenterTest {
     }
 
     @Test
-    public void givenCombinedPostsReturnsNullList_whenViewIsAttached_shouldPassItToAdapterWithoutError() throws Exception {
+    public void givenCombinedPostsReturnsNoList_whenViewIsAttached_shouldNotPassToAdapter() throws Exception {
         //Test when view is attached and data controller emits valid data, onSubscribe should be called from view, which is attached to the adapter
-        mPostListObservable = Observable.just(getNullPostItems());
-        when(mDataController.getCombinedPosts()).thenReturn(mPostListObservable);
+        when(mDataController.getCombinedPosts()).thenReturn(Observable.empty());
 
         mPresenter = new PostListPresenter(mDataController);
         mPresenter.attachView(mView);
 
-        verify(mView, atLeastOnce()).onSubscribe(getNullPostItems());
+        verify(mView, never()).onSubscribe(anyList());
     }
 
     @Test

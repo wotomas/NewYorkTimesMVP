@@ -1,0 +1,44 @@
+#
+# Build configuration for Circle CI
+#
+
+general:
+    artifacts:
+        - /home/ubuntu/CriminalIntent/app/build/outputs/apk/
+    general:
+        branches:
+            only:
+                - master # list of branches to build
+
+machine:
+    environment:
+        ANDROID_HOME: /usr/local/android-sdk-linux
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+
+dependencies:
+    pre:
+        - sudo pip install -U crcmod
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,android-26
+        - echo y | android update sdk --no-ui --all --filter build-tools-26.0.1
+        - echo y | android update sdk --no-ui --all --filter android-26
+        - echo y | android update sdk --no-ui --all --filter tools
+        - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
+        - echo y | android update sdk --no-ui --all --filter extra-android-support
+        - echo y | android update sdk --no-ui --all --filter extra-google-google_play_services
+        - echo y | android update sdk --no-ui --all --filter extra-google-m2repository
+    override:
+        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+    post:
+        - ./gradlew :app:assembleDebug -PdisablePreDex
+        - ./gradlew :app:assembleAndroidTest -PdisablePreDex
+        - echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/client-secret.json
+        - sudo /opt/google-cloud-sdk/bin/gcloud config set project newyorktimesmvp
+        - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+        - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components install beta
+        - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
+
+test:
+    override:
+        - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud beta firebase test android run --app app/build/outputs/apk/app-debug.apk --test app/build/outputs/apk/app-debug-androidTest.apk --results-bucket cloud-test-newyorktimesmvp
+    post:
+        - sudo /opt/google-cloud-sdk/bin/gsutil -m cp -r -U `sudo /opt/google-cloud-sdk/bin/gsutil ls gs://cloud-test-circle-ctl-test | tail -1` $CIRCLE_ARTIFACTS/ | true

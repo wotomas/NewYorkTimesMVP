@@ -3,9 +3,9 @@ package info.kimjihyok.new_york_times_client.data.remote;
 import java.util.Map;
 
 import info.kimjihyok.new_york_times_client.post.list.TopStoryResult;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
-import rx.Observable;
 
 /**
  * Created by jkimab on 2016. 12. 5..
